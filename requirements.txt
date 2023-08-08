@@ -3,3 +3,4 @@ djangorestframework
 djoser
 Pillow
 drf-extra-fields
+gunicorn

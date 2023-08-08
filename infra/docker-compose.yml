@@ -13,6 +13,7 @@ services:
 
   backend:
     image: miserss/foodgram_backend:v2
+    platform: linux/amd64
     restart: always
     volumes:
       - static_volume:/app/backend/static/
@@ -24,6 +25,7 @@ services:
 
   frontend:
     image: miserss/foodgram_frontend:v1
+    platform: linux/amd64
     volumes:
       - frontend_volume:/app/result_build/build/
     depends_on:
