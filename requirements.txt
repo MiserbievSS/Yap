@@ -1,6 +1,0 @@
-Django==3.2
-djangorestframework
-djoser
-Pillow
-drf-extra-fields
-gunicorn

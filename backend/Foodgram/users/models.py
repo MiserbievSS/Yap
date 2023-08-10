@@ -7,4 +7,16 @@ class User(AbstractUser):
     username = models.CharField(max_length=150, unique=True)
     first_name = models.CharField(max_length=150)
     last_name = models.CharField(max_length=150)
-    is_subcribed = models.BooleanField(default=False)
+    is_subscribed = models.BooleanField(default=False)
+
+
+class Subscription(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='follower'
+    )
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE,
+        related_name='author'
+    )

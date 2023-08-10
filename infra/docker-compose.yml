@@ -3,37 +3,28 @@ version: '3.9'
 services:
 
   db:
-    image: postgres:13-alpine
+    image: postgres:13
     platform: linux/amd64
-    restart: always
     volumes:
-      - postgresql_volume:/var/lib/postgresql/data/
+      - pg_data:/var/lib/postgresql/data
     env_file:
-      - ./.env
+      - .env
 
   backend:
-    image: miserss/foodgram_backend:v2
-    platform: linux/amd64
-    restart: always
+    build: ../backend/
     volumes:
       - static_volume:/app/backend/static/
       - media_volume:/app/backend/media/
-    depends_on:
-     - db
     env_file:
       - ./.env
 
   frontend:
     image: miserss/foodgram_frontend:v1
-    platform: linux/amd64
     volumes:
       - frontend_volume:/app/result_build/build/
-    depends_on:
-      - backend
 
   nginx:
     image: nginx:latest
-    restart: always
     ports:
       - "80:80"
     volumes:
@@ -41,8 +32,6 @@ services:
       - frontend_volume:/usr/share/nginx/html/
       - static_volume:/var/html/static/
       - media_volume:/var/html/media/
-    depends_on:
-      - frontend
 
 volumes:
   postgresql_volume:

@@ -17,13 +17,15 @@ class Recipe(models.Model):
     ingredients = models.ManyToManyField(
         'Ingredient',
         through='RecipeIngredient'
-        )
-    #is_favorited = 
-    #is_in_shopping_cart = 
+    )
     name = models.CharField(max_length=200)
     image = models.ImageField(upload_to='recipes/')
     text = models.TextField()
-    cooking_time = models.PositiveSmallIntegerField() # добавить валидацию >=1
+    cooking_time = models.PositiveSmallIntegerField()
+    pub_date = models.DateTimeField(auto_now_add=True,)
+
+    class Meta:
+        ordering = ('-pub_date',)
 
 
 class Ingredient(models.Model):
@@ -32,16 +34,36 @@ class Ingredient(models.Model):
 
 
 class RecipeIngredient(models.Model):
-    recipe = models.ForeignKey(Recipe, related_name='recipe_ingredients', on_delete=models.CASCADE)
+    recipe = models.ForeignKey(
+        Recipe,
+        related_name='recipe_ingredients',
+        on_delete=models.CASCADE
+    )
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField()
 
 
 class FavoriteList(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='is_favorited')
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='is_favorited')
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='is_favorited'
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='is_favorited'
+    )
 
 
 class ShoppingCart(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='is_in_shopping_cart')
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='is_in_shopping_cart')
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='is_in_shopping_cart'
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name='is_in_shopping_cart'
+    )

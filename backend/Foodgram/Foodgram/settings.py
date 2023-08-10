@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'api',
     'recipes',
     'users',
+    'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -70,8 +71,12 @@ WSGI_APPLICATION = 'Foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.getenv('POSTGRES_DB', 'django'),
+        'USER': os.getenv('POSTGRES_USER', 'django_user'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'mysecretpassword'),
+        'HOST': os.getenv('DB_HOST', 'db'),
+        'PORT': os.getenv('DB_PORT', 5432)
     }
 }
 
@@ -98,7 +103,7 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'ru'
 
 TIME_ZONE = 'UTC'
 
@@ -125,27 +130,28 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
+    'PAGE_SIZE': 6,
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
-    # 'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPageNumberPagination',
-    # 'PAGE_SIZE': 6
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
 }
 
 DJOSER = {
     'LOGIN_FIELD': 'email',
     'HIDE_USERS': False,
-    'SEND_ACTIVATION_EMAIL': False,
-
     'SERIALIZERS': {
+        'user': 'api.serializers.UserSerializer',
         'user_create': 'api.serializers.UserCreateSerializer',
-        'current_user': 'api.serializers.CurrentUserSerializer',
-        'user': 'api.serializers.CurrentUserSerializer',
+        'current_user': 'api.serializers.UserSerializer',
     },
     'PERMISSIONS': {
         'user': ('rest_framework.permissions.IsAuthenticatedOrReadOnly',),
         'user_list': ('rest_framework.permissions.AllowAny',),
-        'token_create': ['rest_framework.permissions.AllowAny'],
     },
 }
 
