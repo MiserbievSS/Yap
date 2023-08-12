@@ -1,7 +1,6 @@
 from djoser.serializers import UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import (FavoriteList, Ingredient, Recipe, RecipeIngredient,
-                            ShoppingCart, Tag)
+from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
 from rest_framework import serializers
 from users.models import Subscription, User
 
@@ -33,6 +32,7 @@ class UserCreateSerializer(UserCreateSerializer):
 
 class UserSerializer(serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField()
+
     class Meta:
         model = User
         fields = ('id', 'email', 'username',
@@ -148,10 +148,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError(
                 'Выберите хотя бы 1 ингредиент'
             )
-        # if len(ingredients) != len(set(ingredients)):
-        #     raise serializers.ValidationError(
-        #         'Вы уже добавили такой ингредиент'
-        #     )
         for ingredient in ingredients:
             if ingredient['amount'] < 1:
                 raise serializers.ValidationError(
@@ -169,12 +165,11 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             )
         return recipe
 
-
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
         recipe = Recipe.objects.create(**validated_data)
-        
+
         return self.add_tags_and_ingredients(tags, ingredients, recipe)
 
     def update(self, recipe, validated_data):
@@ -183,4 +178,5 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         recipe.ingredients.clear()
         recipe.tags.clear()
         recipe = super().update(recipe, validated_data)
+
         return self.add_tags_and_ingredients(tags, ingredients, recipe)
