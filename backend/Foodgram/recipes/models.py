@@ -1,6 +1,5 @@
-from django.db import models
 from django.contrib.auth import get_user_model
-
+from django.db import models
 
 User = get_user_model()
 
@@ -12,11 +11,15 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
-    tags = models.ManyToManyField(Tag)
-    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    tags = models.ManyToManyField(Tag, related_name='recipes')
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='recipes'
+    )
     ingredients = models.ManyToManyField(
         'Ingredient',
-        through='RecipeIngredient'
+        through='RecipeIngredient',
     )
     name = models.CharField(max_length=200)
     image = models.ImageField(upload_to='recipes/')

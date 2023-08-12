@@ -1,5 +1,4 @@
 from django_filters import rest_framework as filters
-
 from recipes.models import Ingredient, Recipe
 
 
@@ -20,12 +19,12 @@ class RecipeFilter(filters.FilterSet):
 
     def filter_is_favorited(self, queryset, _, value):
         if value:
-            return queryset.filter(in_favorite__user=self.request.user)
+            return queryset.filter(is_favorited__user=self.request.user)
         return queryset
 
     def filter_is_in_shopping_cart(self, queryset, _, value):
         if value:
-            return queryset.filter(shopping_cart__user=self.request.user)
+            return queryset.filter(is_in_shopping_cart__user=self.request.user)
         return queryset
 
 
