@@ -2,14 +2,11 @@ from django.http import FileResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
 from djoser.views import UserViewSet
-from recipes.models import (FavoriteList, Ingredient, Recipe, RecipeIngredient,
-                            ShoppingCart, Tag)
 from rest_framework import filters, status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
-from users.models import Subscription, User
 
 from .filters import IngredientFilter, RecipeFilter
 from .pagination import LimitPageNumberPagination
@@ -17,6 +14,9 @@ from .permissions import IsAuthorOrReadOnly
 from .serializers import (IngredientSerializer, RecipeCreateSerializer,
                           RecipeSerializer, SubscribeRecipeSerializer,
                           SubscriptionSerializer, TagSerializer)
+from recipes.models import (FavoriteList, Ingredient, Recipe, RecipeIngredient,
+                            ShoppingCart, Tag)
+from users.models import Subscription, User
 
 
 class UserViewSet(UserViewSet):
@@ -130,12 +130,18 @@ class RecipeViewSet(ModelViewSet):
             ShoppingCart
         )
 
+    @action(
+        detail=False,
+        methods=['GET'],
+        permission_classes=(IsAuthenticated,)
+    )
     def download_shopping_cart(self, request):
         user = request.user
         recipes = ShoppingCart.objects.filter(user=user)
         file_name = 'shopping_cart.txt'
         with open(file_name, 'w') as file:
             for recipe in recipes:
+                recipe = recipe.recipe
                 recipe_string = f'Рецепт: {recipe.name}\nИнгредиенты:\n'
                 ingredients = RecipeIngredient.objects.filter(recipe=recipe.id)
                 for ingredient in ingredients:

@@ -14,8 +14,8 @@ services:
     build: ../backend/
     platform: linux/amd64
     volumes:
-      - static_volume:/app/backend/static/
-      - media_volume:/app/backend/media/
+      - static_volume:/app/static/
+      - media_volume:/app/media/
     env_file:
       - ./.env
 

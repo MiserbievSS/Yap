@@ -1,7 +1,8 @@
 from djoser.serializers import UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
-from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
 from rest_framework import serializers
+
+from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
 from users.models import Subscription, User
 
 
@@ -41,7 +42,7 @@ class UserSerializer(serializers.ModelSerializer):
     def get_is_subscribed(self, obj):
         user = self.context.get('request').user
         if user.is_authenticated:
-            return Subscription.objects.filter(user=user, author=obj).exists()
+            return obj.follower.filter(user=user).exists()
 
 
 class SubscriptionSerializer(UserSerializer):
@@ -90,7 +91,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     tags = TagSerializer(many=True)
-    image = Base64ImageField()
+    image = Base64ImageField(use_url=False)
     ingredients = RecipeIngredientSerializer(
         many=True,
         source='recipe_ingredients'
@@ -122,7 +123,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         many=True
     )
     ingredients = RecipeIngredientSerializer(many=True)
-    image = Base64ImageField()
+    image = Base64ImageField(use_url=False)
 
     class Meta:
         model = Recipe
@@ -180,4 +181,3 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         recipe = super().update(recipe, validated_data)
 
         return self.add_tags_and_ingredients(tags, ingredients, recipe)
-#
