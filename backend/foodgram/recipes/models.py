@@ -22,7 +22,7 @@ class Recipe(models.Model):
         through='RecipeIngredient',
     )
     name = models.CharField(max_length=200)
-    image = models.ImageField()
+    image = models.ImageField(upload_to='media/', default=None)
     text = models.TextField()
     cooking_time = models.PositiveSmallIntegerField()
     pub_date = models.DateTimeField(auto_now_add=True,)

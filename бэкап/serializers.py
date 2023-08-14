@@ -8,6 +8,7 @@ from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
 from users.models import Subscription, User
 
 
+
 class SubscribeRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
@@ -93,7 +94,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 class RecipeSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     tags = TagSerializer(many=True)
-    image = Base64ImageField()
+    image = Base64ImageField(use_url=False)
     ingredients = SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
@@ -130,7 +131,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         many=True
     )
     ingredients = RecipeIngredientSerializer(many=True)
-    image = Base64ImageField()
+    image = Base64ImageField(use_url=False)
 
     class Meta:
         model = Recipe
@@ -172,7 +173,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 amount=ingredient.get('amount'),
                 recipe=recipe
             ))
-
+        
         return RecipeIngredient.objects.bulk_create(recipe_ingredients)
 
     def create(self, validated_data):
