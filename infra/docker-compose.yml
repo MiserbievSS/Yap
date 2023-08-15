@@ -6,12 +6,12 @@ services:
     image: postgres:13
     platform: linux/amd64
     volumes:
-      - pg_data:/var/lib/postgresql/data/
+      - pg_data:/var/lib/postgresql/data
     env_file:
       - .env
 
   backend:
-    image: miserss/foodgram_backend
+    build: ../backend/
     platform: linux/amd64
     volumes:
       - static_volume:/app/static/
@@ -20,11 +20,10 @@ services:
       - ./.env
 
   frontend:
-    image: miserss/foodgram_frontend
+    image: miserss/foodgram_frontend:v1
     platform: linux/amd64
     volumes:
       - frontend_volume:/app/result_build/build/
-    env_file: .env
 
   nginx:
     image: nginx:latest
@@ -35,9 +34,6 @@ services:
       - frontend_volume:/usr/share/nginx/html/
       - static_volume:/var/html/static/
       - media_volume:/var/html/media/
-    env_file: .env
-    depends_on:
-      - db
 
 volumes:
   pg_data:
