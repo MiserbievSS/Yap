@@ -14,8 +14,8 @@ services:
     build: miserss/foodgram_backend:v3
     platform: linux/amd64
     volumes:
-      - static_volume:/app/static/
-      - media_volume:/app/media/
+      - static_volume:/backend_static
+      - media_volume:/app/media
     env_file:
       - ./.env
 
