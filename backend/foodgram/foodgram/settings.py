@@ -13,7 +13,7 @@ SECRET_KEY = 'django-insecure-r-oi=b%^mu_45rj+5yjs0a=yv+s8)nt0^*1@=sj51_(1*bh2f@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['158.160.66.8', 'foodgrammss.ddns.net']
+ALLOWED_HOSTS = ['localhost', '158.160.66.8', 'foodgrammss.ddns.net']
 
 
 # Application definition
