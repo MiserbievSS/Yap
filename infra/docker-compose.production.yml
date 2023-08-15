@@ -28,7 +28,7 @@ services:
   nginx:
     image: nginx:latest
     ports:
-      - "9090:80"
+      - "8000:80"
     volumes:
       - ./nginx.conf/:/etc/nginx/conf.d/default.conf
       - frontend_volume:/usr/share/nginx/html/
