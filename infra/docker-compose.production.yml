@@ -36,8 +36,8 @@ services:
      volumes:
        - ./docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
        - ./docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
-       - static:/static/
-       - media:/app/media/
+       - static://var/html/static/
+       - media:/var/html/media/
      ports:
        - "9090:80"
      depends_on:
