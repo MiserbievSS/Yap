@@ -1,5 +1,6 @@
 from django.urls import include, path
 from rest_framework import routers
+from django.contrib import admin
 
 from api.views import IngredientViewSet, RecipeViewSet, TagViewSet, UserViewSet
 
@@ -10,7 +11,13 @@ router.register('ingredients', IngredientViewSet)
 router.register('recipes', RecipeViewSet)
 
 
+#urlpatterns = [
+#    path('auth/', include('djoser.urls.authtoken')),
+#    path('', include(router.urls)),
+#]
 urlpatterns = [
-    path('auth/', include('djoser.urls.authtoken')),
-    path('', include(router.urls)),
+    path('admin/', admin.site.urls),
+    path('api/', include(router.urls)),
+    path('api/', include('djoser.urls')),  # Работа с пользователями
+    path('api/', include('djoser.urls.authtoken')),  # Работа с токенами
 ]
