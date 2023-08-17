@@ -173,7 +173,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 recipe=recipe
             ))
 
-        return RecipeIngredient.objects.bulk_create([recipe_ingredients])
+        return RecipeIngredient.objects.bulk_create(recipe_ingredients)
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
