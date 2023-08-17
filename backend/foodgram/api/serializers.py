@@ -194,7 +194,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
         if ingredients is not None:
             RecipeIngredient.objects.filter(recipe=recipe).delete()
-            self._link_ingredients_to_recipe(recipe, ingredients)
 
         if tags is not None:
             recipe.tags.set(tags)
