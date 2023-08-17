@@ -186,17 +186,12 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, recipe, validated_data):
-        ingredients = validated_data.pop('ingredients', None)
-        tags = validated_data.pop('tags', None)
-
-        for attr, value in validated_data.items():
-            setattr(recipe, attr, value)
-
-        if ingredients is not None:
-            RecipeIngredient.objects.filter(recipe=recipe).delete()
-
-        if tags is not None:
-            recipe.tags.set(tags)
-
+        recipe.ingredients.clear()
+        recipe.tags.clear()
+        ingredients = validated_data.pop('ingredients')
+        tags = validated_data.pop('tags')
         recipe = super().update(recipe, validated_data)
+        recipe.tags.set(tags)
+        self.add_tags_and_ingredients(tags, ingredients, recipe)
+
         return recipe
