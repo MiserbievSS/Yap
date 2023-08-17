@@ -89,9 +89,6 @@ class RecipeViewSet(ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-    def perform_update(self, serializer):
-        serializer.save(author=self.request.user)
-
     def operations_shopping_and_favorite_cart(self, request, id, model):
         if request.method == 'POST':
             if model.objects.filter(user=request.user, recipe__id=id):
