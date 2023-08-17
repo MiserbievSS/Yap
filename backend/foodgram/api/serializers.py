@@ -184,14 +184,15 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         self.add_tags_and_ingredients(tags, ingredients, recipe)
 
         return recipe
-
+    
     def update(self, recipe, validated_data):
-        recipe.ingredients.clear()
         recipe.tags.clear()
-        ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
-        recipe = super().update(recipe, validated_data)
         recipe.tags.set(tags)
-        self.add_tags_and_ingredients(tags, ingredients, recipe)
-
-        return recipe
+        recipe.ingredients.clear()
+        ingredients = validated_data.pop('ingredients')
+        self.add_tags_and_ingredients(ingredients, recipe)
+        return super().update(
+            recipe,
+            validated_data
+        )
