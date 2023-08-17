@@ -15,6 +15,10 @@
 ## Проект доступен по адресу:
 
 [foodgram](foodgrammss.ddns.net)
+### Доступ к админке:
+[admin](https://foodgrammss.ddns.net/admin/)
+    login: admin
+    password: admin
 
 ## Автор проекта 
 ### Мисербиев С.С.

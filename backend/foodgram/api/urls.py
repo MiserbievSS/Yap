@@ -10,11 +10,6 @@ router.register('tags', TagViewSet)
 router.register('ingredients', IngredientViewSet)
 router.register('recipes', RecipeViewSet)
 
-
-# urlpatterns = [
-#    path('auth/', include('djoser.urls.authtoken')),
-#    path('', include(router.urls)),
-# ]
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(router.urls)),
