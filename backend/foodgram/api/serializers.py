@@ -164,7 +164,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return ingredients
 
     def add_tags_and_ingredients(self, tags, ingredients, recipe):
-        recipe.tags.set(tags)
+        for tag in tags:
+            recipe.tags.add(tag)
+            recipe.save()
         recipe_ingredients = []
         for ingredient in ingredients:
             recipe_ingredients.append(RecipeIngredient(
@@ -187,9 +189,9 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         recipe.ingredients.clear()
         recipe.tags.clear()
         ingredients = validated_data.pop('ingredients')
-        tags_id = validated_data.pop('tags')
-        tags = [Tag.objects.get(id=id) for id in tags_id]
+        tags = validated_data.pop('tags')
         recipe = super().update(recipe, validated_data)
+        recipe.tags.set(tags)
         self.add_tags_and_ingredients(tags, ingredients, recipe)
 
         return recipe
