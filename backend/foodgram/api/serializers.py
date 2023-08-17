@@ -1,4 +1,5 @@
 from django.db.models import F
+from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
@@ -164,16 +165,17 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return ingredients
 
     def add_tags_and_ingredients(self, tags, ingredients, recipe):
-        recipe.tags.set(tags)
-        recipe_ingredients = []
-        for ingredient in ingredients:
-            recipe_ingredients.append(RecipeIngredient(
-                ingredient_id=ingredient.get('id'),
-                amount=ingredient.get('amount'),
-                recipe=recipe
-            ))
-
-        return RecipeIngredient.objects.bulk_create(recipe_ingredients)
+        ingredient_list = [
+            RecipeIngredient(
+                recipe=recipe,
+                ingredient=get_object_or_404(
+                    Ingredient, id=ingredient.get("id")
+                ),
+                amount=ingredient.get("amount")
+            )
+            for ingredient in ingredients
+        ]
+        RecipeIngredient.objects.bulk_create(ingredient_list)
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
