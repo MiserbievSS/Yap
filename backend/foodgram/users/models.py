@@ -26,10 +26,6 @@ class Subscription(models.Model):
             models.UniqueConstraint(
                 fields=['user', 'author'], name='unique_relationships'
             ),
-            models.CheckConstraint(
-                name='prevent_self_follow',
-                check=~models.Q(user=models.F('author')),
-            ),
         ]
         verbose_name = 'Подписчик'
         verbose_name_plural = 'Подписчики'
