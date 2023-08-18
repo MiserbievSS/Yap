@@ -1,5 +1,4 @@
 from django.db.models import F
-from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
@@ -165,17 +164,16 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return ingredients
 
     def add_tags_and_ingredients(self, tags, ingredients, recipe):
-        ingredient_list = [
-            RecipeIngredient(
-                recipe=recipe,
-                ingredient=get_object_or_404(
-                    Ingredient, id=ingredient.get("id")
-                ),
-                amount=ingredient.get("amount")
-            )
-            for ingredient in ingredients
-        ]
-        RecipeIngredient.objects.bulk_create(ingredient_list)
+        recipe.tags.set(tags)
+        recipe_ingredients = []
+        for ingredient in ingredients:
+            recipe_ingredients.append(RecipeIngredient(
+                ingredient_id=ingredient.get('id'),
+                amount=ingredient.get('amount'),
+                recipe=recipe
+            ))
+
+        return RecipeIngredient.objects.bulk_create(recipe_ingredients)
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
@@ -186,13 +184,12 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, recipe, validated_data):
-        recipe.tags.clear()
-        tags = validated_data.pop('tags')
-        recipe.tags.set(tags)
         recipe.ingredients.clear()
+        recipe.tags.clear()
         ingredients = validated_data.pop('ingredients')
-        self.add_tags_and_ingredients(ingredients, recipe)
-        return super().update(
-            recipe,
-            validated_data
-        )
+        tags = validated_data.pop('tags')
+        recipe = super().update(recipe, validated_data)
+        recipe.tags.set(tags)
+        self.add_tags_and_ingredients(tags, ingredients, recipe)
+
+        return recipe
