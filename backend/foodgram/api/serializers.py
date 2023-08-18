@@ -1,6 +1,8 @@
+from rest_framework.exceptions import ValidationError
 from django.db.models import F
 from djoser.serializers import UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
+from rest_framework import status
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
@@ -64,9 +66,20 @@ class SubscriptionSerializer(UserSerializer):
             'recipes_count',
         )
 
-    def get_is_subscribed(self, obj):
-        obj = obj.author
-        super().get_is_subscribed()
+    def validate(self, data):
+        author = self.instance
+        user = self.context.get('request').user
+        if Subscription.objects.filter(author=author, user=user).exists():
+            raise ValidationError(
+                detail='Вы уже подписаны на этого пользователя!',
+                code=status.HTTP_400_BAD_REQUEST
+            )
+        if user == author:
+            raise ValidationError(
+                detail='Вы не можете подписаться на самого себя!',
+                code=status.HTTP_400_BAD_REQUEST
+            )
+        return data
 
     def get_recipes(self, obj):
         recipes_limit = self.context.get('request').GET.get('recipes_limit')
