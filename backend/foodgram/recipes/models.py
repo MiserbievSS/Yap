@@ -73,7 +73,6 @@ class FavoriteList(models.Model):
         verbose_name_plural = 'Избранные'
 
 
-
 class ShoppingCart(models.Model):
     user = models.ForeignKey(
         User,
@@ -85,6 +84,7 @@ class ShoppingCart(models.Model):
         on_delete=models.CASCADE,
         related_name='is_in_shopping_cart'
     )
+
     class Meta:
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзины'
