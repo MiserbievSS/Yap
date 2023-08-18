@@ -15,7 +15,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'foodgrammss.ddns.net']
 
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -67,6 +66,7 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
+
 
 DATABASES = {
     'default': {

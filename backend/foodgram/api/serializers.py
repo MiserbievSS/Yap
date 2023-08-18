@@ -92,7 +92,7 @@ class RecipeIngredientSerializer(serializers.ModelSerializer):
 
 class RecipeSerializer(serializers.ModelSerializer):
     author = UserSerializer()
-    tags = TagSerializer(many=True)
+    tags = TagSerializer(read_only=True, many=True)
     image = Base64ImageField()
     ingredients = SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
@@ -164,9 +164,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         return ingredients
 
     def add_tags_and_ingredients(self, tags, ingredients, recipe):
-        for tag in tags:
-            recipe.tags.add(tag)
-            recipe.save()
+        recipe.tags.set(tags)
         recipe_ingredients = []
         for ingredient in ingredients:
             recipe_ingredients.append(RecipeIngredient(
@@ -191,7 +189,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
         recipe = super().update(recipe, validated_data)
-        recipe.tags.set(tags)
         self.add_tags_and_ingredients(tags, ingredients, recipe)
 
         return recipe

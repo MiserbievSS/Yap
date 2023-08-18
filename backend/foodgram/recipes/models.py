@@ -9,6 +9,10 @@ class Tag(models.Model):
     slug = models.SlugField(max_length=200)
     name = models.CharField(max_length=200, unique=True)
 
+    class Meta:
+        verbose_name = 'Тег'
+        verbose_name_plural = 'Теги'
+
 
 class Recipe(models.Model):
     tags = models.ManyToManyField(Tag, related_name='recipes')
@@ -29,11 +33,17 @@ class Recipe(models.Model):
 
     class Meta:
         ordering = ('-pub_date',)
+        verbose_name = 'Рецепт'
+        verbose_name_plural = 'Рецепты'
 
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=200)
     measurement_unit = models.CharField(max_length=200)
+
+    class Meta:
+        verbose_name = 'Ингредиент'
+        verbose_name_plural = 'Ингредиенты'
 
 
 class RecipeIngredient(models.Model):
@@ -58,6 +68,11 @@ class FavoriteList(models.Model):
         related_name='is_favorited'
     )
 
+    class Meta:
+        verbose_name = 'Избранное'
+        verbose_name_plural = 'Избранные'
+
+
 
 class ShoppingCart(models.Model):
     user = models.ForeignKey(
@@ -70,3 +85,6 @@ class ShoppingCart(models.Model):
         on_delete=models.CASCADE,
         related_name='is_in_shopping_cart'
     )
+    class Meta:
+        verbose_name = 'Корзина'
+        verbose_name_plural = 'Корзины'
