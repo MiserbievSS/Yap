@@ -15,7 +15,7 @@
 ## Проект доступен по адресу:
 
 (foodgrammss.ddns.net)
-### Доступ к админке:
+### Доступ к админке здесь :
 (https://foodgrammss.ddns.net/admin/)
     login: admin
     password: admin
