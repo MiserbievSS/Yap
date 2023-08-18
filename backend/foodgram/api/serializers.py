@@ -1,5 +1,6 @@
 from rest_framework.exceptions import ValidationError
 from django.db.models import F
+from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import status
@@ -169,14 +170,21 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
 
     def validate_ingredients(self, ingredients):
         if not ingredients:
-            raise serializers.ValidationError(
-                'Выберите хотя бы 1 ингредиент'
-            )
-        for ingredient in ingredients:
-            if ingredient['amount'] < 1:
-                raise serializers.ValidationError(
-                    'Количество ингредиентов не может быть меньше 1'
-                )
+            raise serializers.ValidationError({
+                'ingredients': 'Выберите хотя бы один ингредиент!'
+            })
+        ingredients_list = []
+        for item in ingredients:
+            ingredient = get_object_or_404(Ingredient, id=item['id'])
+            if ingredient in ingredients_list:
+                raise serializers.ValidationError({
+                    'ingredients': 'Ингредиенты не должны повторяться!'
+                })
+            if int(item['amount']) <= 0:
+                raise serializers.ValidationError({
+                    'amount': 'Количество ингредиентов должно быть больше 1'
+                })
+            ingredients_list.append(ingredient)
         return ingredients
 
     def add_tags_and_ingredients(self, tags, ingredients, recipe):
