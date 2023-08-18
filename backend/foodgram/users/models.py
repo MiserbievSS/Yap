@@ -18,22 +18,24 @@ class User(AbstractUser):
         return self.username
 
 
-class Subscription(models.Model):
+class Subscribe(models.Model):
     user = models.ForeignKey(
         User,
+        related_name='follower',
+        verbose_name="Подписчик",
         on_delete=models.CASCADE,
-        related_name='follower'
     )
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE,
-        related_name='author'
+        User,
+        related_name='author',
+        verbose_name="Автор",
+        on_delete=models.CASCADE,
     )
 
     class Meta:
+        ordering = ['-id']
         constraints = [
-            models.UniqueConstraint(
-                fields=['user', 'author'], name='unique_relationships'
-            ),
+            models.UniqueConstraint(fields=['user', 'author'], name='unique')
         ]
-        verbose_name = 'Подписчик'
-        verbose_name_plural = 'Подписчики'
+        verbose_name = 'Подписка'
+        verbose_name_plural = 'Подписки'
