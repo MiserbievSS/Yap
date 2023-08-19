@@ -22,7 +22,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_display = ('name', 'id', 'author', 'added_in_favorited')
     filter_horizontal = ('ingredients',)
 
-    @display(description='Количество в избранных')
+    @display(description='количество в избранных')
     def added_in_favorited(self, obj):
         return obj.is_favorited.count()
 
