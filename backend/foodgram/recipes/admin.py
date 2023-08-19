@@ -39,9 +39,9 @@ class IngredientAdmin(admin.ModelAdmin):
 
 @admin.register(FavoriteList)
 class FavoriteListAdmin(admin.ModelAdmin):
-    list_display = ('user', 'recipe',)
+    pass
 
 
 @admin.register(ShoppingCart)
 class ShoppingCartAdmin(admin.ModelAdmin):
-    list_display = ('recipe', 'ingredient', 'amount',)
+    pass
