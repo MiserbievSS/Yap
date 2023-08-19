@@ -1,40 +1,32 @@
 from django.contrib import admin
 from django.contrib.admin import display
 
-from recipes.models import (FavoriteList, Ingredient, Recipe,
+from recipes.models import (FavoriteList, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
+
+
+class RecipeIngredientInline(admin.TabularInline):
+    model = RecipeIngredient
+    extra = 1
 
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
-    list_display = ('name', 'color', 'slug',)
+    pass
 
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    list_filter = ('author', 'name', 'tags',)
-    list_display = ('name', 'id', 'author', 'added_in_favorited')
-    filter_horizontal = ('ingredients',)
+    inlines = (RecipeIngredientInline,)
 
-    def get_tags(self, obj):
-        return '\n'.join(obj.tags.values_list('name', flat=True))
-
-    get_tags.short_description = 'Тэг или список тэгов'
-
-    def get_ingredients(self, obj):
-        return '\n'.join(obj.ingredients.values_list('name', flat=True))
-
-    get_ingredients.short_description = 'Ингредиент или список ингредиентов'
-
-    @display(description='количество в избранных')
+    @display(description='Количество в избранных')
     def added_in_favorited(self, obj):
-        return obj.is_favorited.count()
+        return obj.favorited.count()
 
 
 @admin.register(Ingredient)
 class IngredientAdmin(admin.ModelAdmin):
-    list_display = ('name', 'measurement_unit',)
-    list_filter = ('name',)
+    pass
 
 
 @admin.register(FavoriteList)
