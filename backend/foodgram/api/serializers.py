@@ -214,7 +214,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
         text = validated_data.pop('text')
         cooking_time = validated_data.pop('cooking_time')
         instance.ingredients.clear()
-        self.add_tags_and_ingredients(tags, ingredients_data)
+        self.add_tags_and_ingredients(tags, ingredients_data, instance)
 
         instance.tags.set(tags)
         instance.name = name
