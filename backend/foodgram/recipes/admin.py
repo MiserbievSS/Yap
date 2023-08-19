@@ -17,10 +17,10 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    inlines = (RecipeIngredientInline, )
+    inlines = [RecipeIngredientInline]
+    list_filter = ('author', 'name', 'tags', 'added_in_favorited')
     list_display = ('name', 'id', 'author', 'added_in_favorited')
-    readonly_fields = ('added_in_favorited',)
-    list_filter = ('author', 'name', 'tags',)
+    filter_horizontal = ('ingredients',)
 
     @display(description='Количество в избранных')
     def added_in_favorited(self, obj):
