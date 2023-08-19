@@ -22,7 +22,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_filter = ('author', 'name', 'tags',)
 
     @display(description='Количество в избранных')
-    def added_in_favorites(self, obj):
+    def added_in_favorited(self, obj):
         return obj.is_favorited.count()
 
 
