@@ -1,8 +1,6 @@
-from django.db.models import F
 from djoser.serializers import UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
-from rest_framework.fields import SerializerMethodField
 
 from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
 from users.models import Subscription, User
@@ -42,11 +40,11 @@ class UserSerializer(serializers.ModelSerializer):
                   'first_name', 'last_name', 'is_subscribed')
 
     def get_is_subscribed(self, obj):
-        if (self.context.get('request')
-           and not self.context['request'].user.is_anonymous):
-            return 
-        Subscription.objects.filter(user=self.context['request'].user,
-                                         author=obj).exists()
+        user = self.context.get('request').user
+        if user.is_authenticated:
+            return Subscription.objects.filter(
+                user=user, author=obj.id
+            ).exists()
         return False
 
 
