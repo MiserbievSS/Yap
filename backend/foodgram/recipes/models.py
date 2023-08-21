@@ -14,6 +14,9 @@ class Tag(models.Model):
         verbose_name = 'Тег'
         verbose_name_plural = 'Теги'
 
+    def __str__(self):
+        return self.name
+
 
 class Ingredient(models.Model):
     name = models.CharField(max_length=200)
@@ -22,6 +25,9 @@ class Ingredient(models.Model):
     class Meta:
         verbose_name = 'Ингредиент'
         verbose_name_plural = 'Ингредиенты'
+
+    def __str__(self):
+        return f'{self.name}, {self.measurement_unit}'
 
 
 class Recipe(models.Model):
@@ -47,6 +53,9 @@ class Recipe(models.Model):
         verbose_name = 'Рецепт'
         verbose_name_plural = 'Рецепты'
 
+    def __str__(self):
+        return self.name
+
 
 class RecipeIngredient(models.Model):
     recipe = models.ForeignKey(
@@ -57,6 +66,12 @@ class RecipeIngredient(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     amount = models.PositiveSmallIntegerField(
         validators=(MinValueValidator(1),))
+
+    def __str__(self):
+        return (
+            f'{self.ingredient.name}'
+            f'({self.ingredient.measurement_unit}) - {self.amount}'
+        )
 
 
 class FavoriteList(models.Model):
@@ -75,6 +90,9 @@ class FavoriteList(models.Model):
         verbose_name = 'Избранное'
         verbose_name_plural = 'Избранные'
 
+    def __str__(self):
+        return f'{self.user} добавил "{self.recipe}" в Избранное'
+
 
 class ShoppingCart(models.Model):
     user = models.ForeignKey(
@@ -91,3 +109,6 @@ class ShoppingCart(models.Model):
     class Meta:
         verbose_name = 'Корзина'
         verbose_name_plural = 'Корзины'
+
+    def __str__(self):
+        return f'{self.user} добавил "{self.recipe}" в корзину'
