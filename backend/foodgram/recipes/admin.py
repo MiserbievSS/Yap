@@ -4,9 +4,15 @@ from recipes.models import (FavoriteList, Ingredient, Recipe, RecipeIngredient,
                             ShoppingCart, Tag)
 
 
-class RecipeIngredientInline(admin.TabularInline):
+# class RecipeIngredientInline(admin.TabularInline):
+#     model = RecipeIngredient
+#     extra = 1
+
+@admin.register(RecipeIngredient)
+class RecipeIngredientInlineAdmin(admin.TabularInline):
     model = RecipeIngredient
     extra = 1
+
 
 
 @admin.register(Tag)
@@ -16,11 +22,20 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    inlines = (RecipeIngredientInline, )
+    inlines = (RecipeIngredientInlineAdmin, )
     readonly_fields = ('added_in_favorited',)
 
     def added_in_favorited(self, obj):
         return obj.favorited.count()
+
+
+# @admin.register(Recipe)
+# class RecipeAdmin(admin.ModelAdmin):
+#     inlines = (RecipeIngredientInline, )
+#     readonly_fields = ('added_in_favorited',)
+
+#     def added_in_favorited(self, obj):
+#         return obj.favorited.count()
 
 
 @admin.register(Ingredient)
