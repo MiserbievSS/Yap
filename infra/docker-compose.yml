@@ -1,7 +1,7 @@
 version: '3.3'
 
 volumes:
-  pg_data:
+  infra_pg_data:
   static:
   media:
 
@@ -10,7 +10,7 @@ services:
     platform: linux/x86_64
     image: postgres:13
     volumes:
-      - pg_data:/var/lib/postgresql/data/
+      - infra_pg_data:/var/lib/postgresql/data/
     env_file:
       - .env
 
