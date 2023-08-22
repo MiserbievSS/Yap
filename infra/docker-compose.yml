@@ -7,6 +7,7 @@ volumes:
 
 services:
   db:
+    platform: linux/x86_64
     image: postgres:13
     volumes:
       - pg_data:/var/lib/postgresql/data/
@@ -14,6 +15,7 @@ services:
       - .env
 
   backend:
+    platform: linux/x86_64
     image: miserss/foodgram_backend
     env_file: .env
     volumes:
@@ -25,20 +27,22 @@ services:
 
   frontend:
     env_file: .env
+    platform: linux/x86_64
     image: miserss/foodgram_frontend
     command: cp -r /app/build/. /frontend_static/
     volumes:
        - static:/frontend_static
 
   nginx:
-     image: miserss/foodgram_gateway
-     env_file: .env
-     volumes:
+    platform: linux/x86_64
+    image: miserss/foodgram_gateway
+    env_file: .env
+    volumes:
        - ./docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
        - ./docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
        - static:/static/
        - media:/media/
-     ports:
+    ports:
        - "9090:80"
-     depends_on:
+    depends_on:
       - db

@@ -24,10 +24,11 @@ class TagAdmin(admin.ModelAdmin):
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = (RecipeIngredientInLine, )
-    # readonly_fields = ('added_in_favorited',)
+    readonly_fields = ('added_in_favorited',)
 
-    # def added_in_favorited(self, obj):
-    #     return obj.favorited.count()
+    @admin.display
+    def added_in_favorited(self, obj):
+        return obj.favorited.count()
 
 
 # @admin.register(Recipe)
