@@ -14,7 +14,6 @@ class RecipeIngredientInlineAdmin(admin.TabularInline):
     extra = 1
 
 
-
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     pass
