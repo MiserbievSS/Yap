@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from recipes.models import (FavoriteList, Ingredient, Recipe, RecipeIngredient,
+from recipes.models import (FavoriteList, Ingredient, Recipe,
                             ShoppingCart, Tag)
 
 
@@ -11,6 +11,9 @@ from recipes.models import (FavoriteList, Ingredient, Recipe, RecipeIngredient,
 # @admin.register(RecipeIngredient)
 # class RecipeIngredientAdmin(admin.ModelAdmin):
 #     pass
+class RecipeIngredientInLine(admin.TabularInline):
+    model = Recipe.ingredients.through
+    extra = 1
 
 
 @admin.register(Tag)
@@ -20,8 +23,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    # inline = RecipeIngredientAdmin
-    inline = RecipeIngredient
+    inline = RecipeIngredientInLine
     readonly_fields = ('added_in_favorited',)
 
     def added_in_favorited(self, obj):
