@@ -38,7 +38,7 @@ class Recipe(models.Model):
         related_name='recipes'
     )
     ingredients = models.ManyToManyField(
-        'Ingredient',
+        Ingredient,
         through='RecipeIngredient',
     )
     name = models.CharField(max_length=200)
