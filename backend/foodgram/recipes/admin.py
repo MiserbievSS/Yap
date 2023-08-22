@@ -9,9 +9,8 @@ from recipes.models import (FavoriteList, Ingredient, Recipe, RecipeIngredient,
 #     extra = 1
 
 @admin.register(RecipeIngredient)
-class RecipeIngredientInlineAdmin(admin.TabularInline):
-    model = RecipeIngredient
-    extra = 1
+class RecipeIngredientAdmin(admin.ModelAdmin):
+    pass
 
 
 @admin.register(Tag)
@@ -21,7 +20,7 @@ class TagAdmin(admin.ModelAdmin):
 
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
-    inlines = (RecipeIngredientInlineAdmin, )
+    inline = RecipeIngredientAdmin
     readonly_fields = ('added_in_favorited',)
 
     def added_in_favorited(self, obj):
