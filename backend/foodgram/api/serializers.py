@@ -7,6 +7,10 @@ from rest_framework import status
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
 
+from api.validators import (
+    validate_ingredients,
+    validate_tags,
+    validate_cooking_time)
 from recipes.models import Ingredient, Recipe, RecipeIngredient, Tag
 from users.models import Subscription, User
 
@@ -160,32 +164,41 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'tags',
             'ingredients'
         )
+    
+    def validate(self, data):
+        validate_tags(self.initial_data.get('tags')),
+        validate_ingredients(
+            self.initial_data.get('ingredients')
+        )
+        validate_cooking_time(
+            self.initial_data.get('cooking_time')
+        )
+        return data
+    # def validate_tags(self, tags):
+    #     if not tags:
+    #         raise serializers.ValidationError(
+    #             'Выберите тег'
+    #         )
+    #     return tags
 
-    def validate_tags(self, tags):
-        if not tags:
-            raise serializers.ValidationError(
-                'Выберите тег'
-            )
-        return tags
-
-    def validate_ingredients(self, ingredients):
-        if not ingredients:
-            raise serializers.ValidationError({
-                'ingredients': 'Выберите хотя бы один ингредиент!'
-            })
-        ingredients_list = []
-        for item in ingredients:
-            ingredient = get_object_or_404(Ingredient, id=item['id'])
-            if ingredient in ingredients_list:
-                raise serializers.ValidationError({
-                    'ingredients': 'Ингредиенты не должны повторяться!'
-                })
-            if int(item['amount']) <= 0:
-                raise serializers.ValidationError({
-                    'amount': 'Количество ингредиента должно быть больше 0'
-                })
-            ingredients_list.append(ingredient)
-        return ingredients
+    # def validate_ingredients(self, ingredients):
+    #     if not ingredients:
+    #         raise serializers.ValidationError({
+    #             'ingredients': 'Выберите хотя бы один ингредиент!'
+    #         })
+    #     ingredients_list = []
+    #     for item in ingredients:
+    #         ingredient = get_object_or_404(Ingredient, id=item['id'])
+    #         if ingredient in ingredients_list:
+    #             raise serializers.ValidationError({
+    #                 'ingredients': 'Ингредиенты не должны повторяться!'
+    #             })
+    #         if int(item['amount']) <= 0:
+    #             raise serializers.ValidationError({
+    #                 'amount': 'Количество ингредиента должно быть больше 0'
+    #             })
+    #         ingredients_list.append(ingredient)
+    #     return ingredients
 
     def add_tags_and_ingredients(self, tags, ingredients, recipe):
         recipe.tags.set(tags)
