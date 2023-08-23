@@ -86,7 +86,7 @@ const RecipeCreate = ({ onEdit }) => {
           api
           .createRecipe(data)
           .then(res => {
-            console.log(recipe_id)
+            console.log(res)
             history.push(`/recipes/${res.id}`)
           })
           .catch(err => {
