@@ -173,15 +173,14 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'ingredients': 'Выберите хотя бы один ингредиент!'
             })
-        
-        ingredient_ids =[item['id'] for item in ingredients]
+
+        ingredient_ids = [item['id'] for item in ingredients]
         existing_ingredients = Ingredient.objects.filter(id__in=ingredient_ids)
-        
+
         if len(existing_ingredients) != len(ingredient_ids):
             raise serializers.ValidationError({
                 'ingredients': 'Один или несколько ингредиентов не существует!'
             })
-
 
         ingredients_list = []
         for item in ingredients:
