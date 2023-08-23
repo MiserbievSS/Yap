@@ -2,7 +2,6 @@ from django.core.exceptions import ValidationError
 
 
 def validate_tags(value):
-    '''Валидация тэгов'''
     tags_list = []
     for tag in value:
         if not tag:
@@ -18,7 +17,6 @@ def validate_tags(value):
 
 
 def validate_ingredients(ingredients):
-    '''Валидация ингредиентов и количества.'''
     if not ingredients:
         raise ValidationError('Ингредиенты не добавлены.')
 
@@ -40,7 +38,6 @@ def validate_ingredients(ingredients):
 
 
 def validate_cooking_time(cooking_time):
-    '''Валидация времени приготовления.'''
     if int(cooking_time) < 1:
         raise ValidationError(
             'Время приготовления должно быть больше 0'
