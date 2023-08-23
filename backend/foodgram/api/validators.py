@@ -1,12 +1,6 @@
 from django.core.exceptions import ValidationError
 
 
-def check_int_is_bool(number):
-    if number not in (0, 1):
-        raise ValidationError('Value must be 1 or 0')
-    return number
-
-
 def validate_tags(value):
     '''Валидация тэгов'''
     tags_list = []

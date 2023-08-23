@@ -1,6 +1,5 @@
 from rest_framework.exceptions import ValidationError
 from django.db.models import F
-from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import status
@@ -164,7 +163,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             'tags',
             'ingredients'
         )
-    
+
     def validate(self, data):
         validate_tags(self.initial_data.get('tags')),
         validate_ingredients(
