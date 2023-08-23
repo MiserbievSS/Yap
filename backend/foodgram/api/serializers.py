@@ -173,15 +173,6 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({
                 'ingredients': 'Выберите хотя бы один ингредиент!'
             })
-
-        ingredient_ids = [item['id'] for item in ingredients]
-        existing_ingredients = Ingredient.objects.filter(id__in=ingredient_ids)
-
-        if len(existing_ingredients) != len(ingredient_ids):
-            raise serializers.ValidationError({
-                'ingredients': 'Один или несколько ингредиентов не существует!'
-            })
-
         ingredients_list = []
         for item in ingredients:
             ingredient = get_object_or_404(Ingredient, id=item['id'])
@@ -191,7 +182,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
                 })
             if int(item['amount']) <= 0:
                 raise serializers.ValidationError({
-                    'amount': 'Количество ингредиентов должно быть больше 1'
+                    'amount': 'Количество ингредиента должно быть больше 0'
                 })
             ingredients_list.append(ingredient)
         return ingredients
