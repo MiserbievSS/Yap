@@ -131,7 +131,6 @@ class Api {
   }) {
     const token = localStorage.getItem('token')
     const authorization = token ? { 'authorization': `Token ${token}` } : {}
-    console.log(recipe_id)
     return fetch(
       `/api/recipes/${recipe_id}/`,
       {
