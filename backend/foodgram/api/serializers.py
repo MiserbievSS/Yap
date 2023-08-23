@@ -155,6 +155,7 @@ class RecipeCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = (
+            'id'
             'name',
             'author',
             'image',
